@@ -17,6 +17,15 @@ module box(board_w, board_l, bottom=false) {
       color("red")translate([0,0,traup])cube([board_w+hole_corner+10, board_l+hole_corner+10, (30+6)/2], center=true);
     }
 }
+module boxtop(board_w, board_l, bottom=false) {
+  cube([board_w+hole_corner+10,board_l+hole_corner+10,4], center=true);
+  translate([0,0,+3])
+  difference() {
+    cube([board_w+hole_corner+6,board_l+hole_corner+6,2], center=true);
+    cube([board_w+hole_corner+3,board_l+hole_corner+3,2], center=true);
+  }
+
+}
 module microusb() {
   translate([0,0,3/2])cube([7,9,3], center=true);
 }
@@ -38,3 +47,4 @@ for (i = [-1,1]) {
     }
   }
 }
+translate([150,0,0]) boxtop(board_w,board_l);
