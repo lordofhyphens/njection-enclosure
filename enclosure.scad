@@ -28,6 +28,19 @@ module box(board_w, board_l, bottom=false) {
     }
   }
 }
+
+module board() {
+  // placeholder board
+  difference() {
+    translate([0,0,standoff_height+1.5])cube([board_w,board_l,board_height], center=true);
+    for (i = [-1,1]) {
+      for (j = [1,-1]) {
+        translate([i*-1*(board_w/2) + i*hole_corner, j*-1*(board_l/2)+j*hole_corner, 0])
+          translate([mounthole/2,mounthole*2,0])cylinder(r=mounthole, h=40,$fn=40);
+      }
+    }
+  }
+}
 module boxtop(board_w, board_l, bottom=false) {
   cube([board_w+hole_corner+10,board_l+hole_corner+10,4], center=true);
   translate([0,0,+3])
@@ -43,26 +56,16 @@ module microusb() {
 module sma(w=9) {
   rotate([90,0,0])translate([0,3,0])cylinder(r=4,h=w);
 }
+
+// punching the cutouts in the box
+// everything is in mm.
 difference() {
   box(board_w,board_l, true);
   color("blue")translate([0,(hole_corner+10+board_l)/2,connector_height]) microusb();
-  color("blue")translate([(board_w/2) - (1.04*25.4),-(hole_corner+board_l)/2,connector_height]) sma();
-  color("blue")translate([-(board_w/2) + (1.04*25.4),-(hole_corner+board_l)/2,connector_height]) sma();
+  // change the +0 below to shift the connector holes up in mm.
+  color("blue")translate([(board_w/2) - (1.04*25.4),-(hole_corner+board_l)/2,connector_height+0]) sma();
+  color("blue")translate([-(board_w/2) + (1.04*25.4),-(hole_corner+board_l)/2,connector_height+0]) sma();
 }
 
-module board() {
-// placeholder board
-difference() {
-  translate([0,0,standoff_height+1.5])cube([board_w,board_l,board_height], center=true);
-  for (i = [-1,1]) {
-    for (j = [1,-1]) {
-      translate([i*-1*(board_w/2) + i*hole_corner, j*-1*(board_l/2)+j*hole_corner, 0])
-        translate([mounthole/2,mounthole*2,0])cylinder(r=mounthole, h=40,$fn=40);
-    }
-  }
-
-}
-
-}
 
 translate([150,0,0]) boxtop(board_w,board_l);
